@@ -17,6 +17,7 @@ const rolTerna = require("../models/rolTerna");
 const groupTerna = require("../models/groupTerna");
 const ternaAsignGroup = require("../models/ternaAsignGroup");
 const ternaAsignStudent = require("../models/ternaAsignStudent");
+const bcrypt = require('bcryptjs');
 
 const initializeTables = async () => {
   try {
@@ -26,7 +27,77 @@ const initializeTables = async () => {
       now.getMonth() + 1,
       now.getDate()
     );
-    
+
+    // Usuarios SUPER ADMIN
+    const sadmin = "sadmin";
+    const hashedPasswordSAdmin = await bcrypt.hash(sadmin, 10);
+    await User.findOrCreate({
+      where: {
+        email: "superAdmin@gmail.com",
+      },
+      defaults: {
+        password: hashedPasswordSAdmin,
+        name: "SuperAdmin",
+        carnet: "000000000",
+        sede_id: 1,
+        rol_id: 4,
+        year_id: 1,
+      },
+    });
+
+    // Usuarios ADMIN
+    const admin = "admin";
+    const hashedPasswordAdmin = await bcrypt.hash(admin, 10);
+
+    await User.findOrCreate({
+      where: {
+        email: "Admin@gmail.com",
+      },
+      defaults: {
+        password: hashedPasswordAdmin,
+        name: "admin",
+        carnet: "000000000",
+        sede_id: 1,
+        rol_id: 3,
+        year_id: 1,
+      },
+    });
+
+    // Usuarios catedratico
+    const catedratico = "catedratico";
+    const hashedPasswordcatedratico = await bcrypt.hash(catedratico, 10);
+
+    await User.findOrCreate({
+      where: {
+        email: "catedratico@gmail.com",
+      },
+      defaults: {
+        password: hashedPasswordcatedratico,
+        name: "catedratico",
+        carnet: "000000000",
+        sede_id: 1,
+        rol_id: 2,
+        year_id: 1,
+      },
+    });
+
+    const estudiante = "catedratico";
+    const hashedPasswordestudiante = await bcrypt.hash(estudiante, 10);
+
+    await User.findOrCreate({
+      where: {
+        email: "estudiante@gmail.com",
+      },
+      defaults: {
+        password: hashedPasswordestudiante,
+        name: "Estudiante",
+        carnet: "000000000",
+        sede_id: 1,
+        rol_id: 1,
+        year_id: 1,
+      },
+    });
+
     await Year.findOrCreate({ where: { year: now.getFullYear() } });
 
     await rolTerna.findOrCreate({ where: { rolTernaName: "Presidente" } });
@@ -37,7 +108,6 @@ const initializeTables = async () => {
     await Roles.findOrCreate({ where: { name: "Catedrático" } });
     await Roles.findOrCreate({ where: { name: "Administrador" } });
     await Roles.findOrCreate({ where: { name: "SuperAdmin" } });
-
 
     await Sede.findOrCreate({ where: { nameSede: "Guastatoya" } });
     await Sede.findOrCreate({ where: { nameSede: "Sanarate" } });
