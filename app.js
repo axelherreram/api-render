@@ -34,7 +34,7 @@ const app = express();
 associateModels();
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'https://api-render-onnv.onrender.com/'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, 
 }));
